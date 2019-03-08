@@ -1,0 +1,94 @@
+1.	Write a shell script, which gets executed the moment the user opens a terminal. It should display the message "Good morning"/"Good Afternoon"/ "Good evening" depending upon the time.
+
+sudo vi /etc/profile
+
+check=`date +%H`
+echo $check
+if [ $check -ge 06 -a $check -le 12 ]
+then
+        echo "Good morning"
+elif [ $check -ge 12 -a $check -le 17 ]
+then
+        echo "Good afternoon"
+else
+        echo "Good evening"
+fi
+
+2.	The file /etc/passwd contains information about all the users. Write a shell script which would receive the login name during execution, obtain information about it, from /etc/passwd and display the information on the screen in easily understandable format.
+
+vi userinfo.sh
+
+echo "Enter user name : "
+read lname
+grep $lname /etc/passwd | cut -d":" -f 1-7 
+
+3.	Write a shell script, which receives two filenames as arguments. It should check whether the two file's contents are same or not (Files may have arbitrary blank lines and the command "cmp" would not work in this case). If they are same one would be deleted.
+
+tr -s " " < $1 > newfile1.txt                                                                                                             
+tr -s " " < $2 > newfile2.txt                                                                                                             
+cmp newfile1.txt newfile2.txt > error                                                                                                     
+tmp=`cat error|wc -l`                                                                                                                     
+if [ $tmp -eq 0 ];                                                                                                                        
+then                                                                                                                                      
+echo "file content same"                                                                                                                  
+else                                                                                                                                      
+echo "file content diff"                                                                                                                  
+fi    
+
+4.	Write a shell script, which deletes all lines containing the word "Linux" in the files supplied as arguments and write the content to another file.
+
+for i in $*                                                                                                                               
+do                                                                                                                                        
+grep -v "Linux" $i > new_$i                                                                                                                  
+done                                                                                                                                      
+
+5.	Write a function change() which would change the prompt to the current directory name in which you are working. Thus if you are working in the directory /home/impact/abc the prompt should look like /home/impact/abc.
+
+change()
+
+{
+
+export PS1="${pwd}>"
+
+}
+
+7.	Write a program to count and report the number of entries present in each sub-directory mentioned in the path, which is supplied as command-line argument.
+
+if [ $# -eq 0 ]
+then
+    echo "Enter path : "
+    read path
+else
+    path=$1
+fi
+
+for dir in `ls -R $path`
+doif [ -e $dir ]
+    then
+        vcount=`expr $vcount+1`
+        echo $dir
+    fi
+done
+    echo "There is $vcount file"
+
+
+
+6.	A friend of yours has promised to log in at a particular time. However he/she has not kept the promise. You want to contact him as soon as he/she logs in. Write a shell script which checks every 5 seconds whether your friend logs in or not. The login name should be supplied as an argument to the shell script at the command prompt.
+
+echo "Please enter the name of the user:"
+ 
+read user
+ 
+who | grep $user>/tmp/usertest &
+ 
+if [ -s/tmp/usertest ]
+ 
+then
+ 
+echo "User is logged in...."
+ 
+else
+ 
+echo "User is not logged in..."
+ 
+fi
